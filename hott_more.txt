@@ -1,0 +1,5 @@
+INSERT id = "lib4", title = "Synthetic Homotopy Theory", year = 2022, pages = 260, rating = 4.4, topic = "Synthetic", is_foundational = false INTO library
+INSERT name = "Pushout HIT", introduced_by = "HoTT Community", introduced_year = 2013, depends_on = "HITs", is_univalent = false, complexity = 0.6 INTO concepts
+
+SELECT title, rating FROM library WHERE rating <= 4.5
+SELECT name, introduced_year FROM concepts WHERE introduced_year != 2013
