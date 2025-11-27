@@ -1,0 +1,39 @@
+query = _{SOI ~ (create_cmd | insert_cmd | delete_cmd | select_cmd | save_cmd | read_cmd) ~ EOI}
+
+create_cmd = {"CREATE" ~ ident ~ "KEY" ~ ident ~ "FIELDS" ~ column ~ ("," ~ column)*}
+
+insert_cmd = {"INSERT" ~ assigment ~ ("," ~ assigment)* ~ "INTO" ~ ident}
+
+delete_cmd = {"DELETE" ~ value ~ "FROM" ~ ident}
+
+select_cmd = {"SELECT" ~  ident ~ ("," ~ ident)* ~ "FROM" ~ ident ~ where_clause?}
+
+save_cmd = {"SAVE_AS" ~ path}
+
+read_cmd = {"READ_FROM" ~ path}
+
+WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
+
+column = {ident ~ ":" ~ typ}
+
+assigment = {ident ~ "=" ~ value}
+
+where_clause = {"WHERE" ~ ident ~ operator ~ value}
+
+typ = {"String" | "Int" | "Float" | "Bool"}
+
+value = {float_w | int_w | bool_w | string_w}
+
+operator = { ">=" | "<=" | "!=" | "=" | ">" | "<" }
+
+ident = @{ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "_")*}
+
+string_w = @{"\"" ~ (!"\"" ~ ANY)* ~ "\""}
+
+int_w = @{ASCII_DIGIT+}
+
+float_w = @{ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT+}
+
+bool_w = @{"false" | "true"}
+
+path = @{(ASCII_ALPHANUMERIC | "." | "_" | "/" | "-")+}
