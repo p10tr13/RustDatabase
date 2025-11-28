@@ -169,6 +169,25 @@ mod tests {
     }
 
     #[test]
+    fn test_exec_select_no_where() {
+        let mut t = Table::new("people".into(), get_people_schema(), "id".into());
+        let mut f1 = HashMap::new();
+        f1.insert("id".into(), Value::Int(1));
+        t.store.insert(1, Record { fields: f1 });
+
+        let mut cmd = SelectCommand {
+            table: &t,
+            fields: vec!["id".into()],
+            condition: None,
+        };
+
+        match cmd.execute() {
+            Ok(Some(output)) => assert!(output.contains("1")),
+            _ => assert!(false, "SELECT without WHERE error"),
+        }
+    }
+
+    #[test]
     fn test_exec_create() {
         let mut db = setup_db();
         let mut cmd = CreateTableCommand {
